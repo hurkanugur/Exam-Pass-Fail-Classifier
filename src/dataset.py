@@ -1,12 +1,8 @@
-# dataset.py
 import torch
 from torch.utils.data import Dataset, DataLoader, random_split
 import pandas as pd
 import config
 
-# -------------------------
-# Private Dataset Class
-# -------------------------
 class _ExamDataset(Dataset):
     """
     Custom Dataset for exam pass/fail classification.
@@ -29,9 +25,7 @@ class _ExamDataset(Dataset):
     def __getitem__(self, idx):
         return self.X[idx], self.y[idx]
 
-# -------------------------
-# Private Dataset Splitting
-# -------------------------
+
 def _split_dataset(dataset):
     """
     Split the dataset into train, validation, and test subsets based on config ratios.
@@ -46,9 +40,7 @@ def _split_dataset(dataset):
 
     return train_ds, val_ds, test_ds
 
-# -------------------------
-# Public DataLoader Creation
-# -------------------------
+
 def create_dataloaders():
     """
     Create DataLoaders for training, validation, and testing.
