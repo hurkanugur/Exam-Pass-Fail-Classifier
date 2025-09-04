@@ -3,12 +3,12 @@ import torch.nn as nn
 import config
 
 class ExamClassifier(nn.Module):
-    def __init__(self, device=None):
+    def __init__(self, input_dim, device=None):
         super().__init__()
         self.net = nn.Sequential(
-            nn.Linear(2, 10),
+            nn.Linear(input_dim, config.HIDDEN_LAYER),
             nn.ReLU(),
-            nn.Linear(10, 1)
+            nn.Linear(config.HIDDEN_LAYER, 1)
         )
 
         self.device = device or torch.device("cuda" if torch.cuda.is_available() else "cpu")

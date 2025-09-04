@@ -2,7 +2,15 @@ import torch
 import config
 from visualize import LossMonitor
 
-def train_model(model, train_loader, val_loader, optimizer, loss_fn, device, loss_monitor: LossMonitor = None):
+def train_model(
+    model: torch.nn.Module,
+    train_loader: torch.utils.data.DataLoader,
+    val_loader: torch.utils.data.DataLoader,
+    optimizer: torch.optim.Optimizer,
+    loss_fn: torch.nn.Module,
+    device: torch.device,
+    loss_monitor: LossMonitor,
+):
     """
     Train a PyTorch model with optional validation and live loss monitoring.
 

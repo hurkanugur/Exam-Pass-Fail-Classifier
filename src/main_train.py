@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 import config
-from dataset import create_dataloaders
+from dataset import ExamDataset
 from model import ExamClassifier
 import test
 import train
@@ -13,11 +13,13 @@ def main():
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print(f"Selected device: {device}")
 
-    # Load data
-    train_loader, val_loader, test_loader = create_dataloaders()
+    # Load and prepare data
+    exam_dataset = ExamDataset()
+    train_loader, val_loader, test_loader = exam_dataset.prepare_data()
 
     # Initialize model, optimizer, loss
-    model = ExamClassifier(device=device)
+    input_dim = exam_dataset.get_input_dim()
+    model = ExamClassifier(input_dim=input_dim, device=device)
     optimizer = torch.optim.Adam(model.parameters(), lr=config.LEARNING_RATE)
     loss_fn = nn.BCEWithLogitsLoss()
 
@@ -30,8 +32,9 @@ def main():
     # Test the model
     test.test_model(model, test_loader, device)
 
-    # Save the model
+    # Save the model and normalization parameters
     model.save()
+    exam_dataset.save_normalization_params()
 
     # Keep the final plot displayed
     loss_monitor.close()

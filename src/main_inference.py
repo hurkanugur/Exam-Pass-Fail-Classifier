@@ -1,10 +1,9 @@
 import torch
 import config
-from dataset import create_dataloaders
+from dataset import ExamDataset
 from model import ExamClassifier
 
 def main():
-
     # -------------------------
     # Select CPU or GPU
     # -------------------------
@@ -12,15 +11,20 @@ def main():
     print(f"Selected device: {device}")
 
     # -------------------------
+    # Load normalization parameters
+    # -------------------------
+    exam_dataset = ExamDataset()
+    exam_dataset.load_normalization_params()
+
+    # -------------------------
     # Load trained model
     # -------------------------
-    model = ExamClassifier(device=device)
+    input_dim = exam_dataset.get_input_dim()  # dynamic input dim
+    model = ExamClassifier(input_dim, device=device)
     model.load()
 
     # -------------------------
-    # Example real-world input
-    # Each row = [Study Hours, Previous Exam Score]
-    # Could come from user input, API, or production system
+    # Example real-world input (raw)
     # -------------------------
     X_real = torch.tensor([
         [5.0, 70.0],
@@ -29,11 +33,20 @@ def main():
     ], dtype=torch.float32)
 
     # -------------------------
+    # Normalize input if enabled
+    # -------------------------
+    if config.NORMALIZE_FEATURES:
+        X_real_norm = exam_dataset.x_scaler.transform(X_real.numpy())
+        X_real_norm = torch.tensor(X_real_norm, dtype=torch.float32).to(device)
+    else:
+        X_real_norm = X_real.to(device)
+
+    # -------------------------
     # Make predictions
     # -------------------------
     model.eval()
     with torch.no_grad():
-        probabilities = torch.sigmoid(model(X_real))
+        probabilities = torch.sigmoid(model(X_real_norm))
         predictions = (probabilities > config.CLASSIFICATION_THRESHOLD).float()
 
     # -------------------------
