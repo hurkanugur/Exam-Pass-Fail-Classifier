@@ -1,10 +1,11 @@
+import numpy as np
+import pandas as pd
 import torch
 import config
-from dataset import create_dataloaders
-from model import ExamClassifier
+from dataset import ExamDataset
+from model import ExamClassificationModel
 
 def main():
-
     # -------------------------
     # Select CPU or GPU
     # -------------------------
@@ -12,28 +13,38 @@ def main():
     print(f"Selected device: {device}")
 
     # -------------------------
-    # Load trained model
+    # Load normalization parameters
     # -------------------------
-    model = ExamClassifier(device=device)
-    model.load()
+    dataset = ExamDataset()
+    dataset.load_normalization_params()
 
     # -------------------------
     # Example real-world input
-    # Each row = [Study Hours, Previous Exam Score]
-    # Could come from user input, API, or production system
     # -------------------------
-    X_real = torch.tensor([
-        [5.0, 70.0],
-        [2.5, 55.0],
-        [8.0, 90.0]
-    ], dtype=torch.float32)
+    df = pd.DataFrame([
+        {"Study Hours": 4, "Previous Exam Score": 81, "Pass/Fail": 0},
+        {"Study Hours": 9, "Previous Exam Score": 72, "Pass/Fail": 1},
+        {"Study Hours": 7, "Previous Exam Score": 48, "Pass/Fail": 0},
+        {"Study Hours": 6, "Previous Exam Score": 88, "Pass/Fail": 1},
+        {"Study Hours": 2, "Previous Exam Score": 81, "Pass/Fail": 0},
+    ], dtype=np.float32)
+
+    X = dataset.prepare_data_for_inference(df)
+    input_dim = X.shape[1]
+
+    # -------------------------
+    # Load trained model
+    # -------------------------
+    model = ExamClassificationModel(input_dim=input_dim, device=device)
+    model.load()
 
     # -------------------------
     # Make predictions
     # -------------------------
     model.eval()
+    X = X.to(device=device)
     with torch.no_grad():
-        probabilities = torch.sigmoid(model(X_real))
+        probabilities = torch.sigmoid(model(X))
         predictions = (probabilities > config.CLASSIFICATION_THRESHOLD).float()
 
     # -------------------------

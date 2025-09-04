@@ -18,6 +18,7 @@ It demonstrates a full machine learning pipeline from data loading to inference,
 - **PyTorch** – model, training, and inference  
 - **pandas** – data handling  
 - **matplotlib** – loss visualization  
+- **pickle** – saving/loading normalization params and trained model
 
 ---
 
@@ -71,18 +72,26 @@ model/
 └── exam_classifier.pth       # Trained model (after training)
 
 src/
-├── config.py                 # Paths, hyperparameters, splits, threshold
-├── dataset.py                # Dataset class & DataLoader creation
-├── model.py                  # Neural network class with save/load
-├── train.py                  # Training loop with optional validation
-├── test.py                   # Test/evaluation loop
-├── inference.py              # Inference utilities for real-world input
-├── main_train.py             # Script to train and evaluate the model
-├── main_inference.py         # Script to run predictions on new data
-├── visualize.py              # Loss monitoring class
+├── config.py                    # Paths, hyperparameters, split ratios
+├── dataset.py                   # Data loading & preprocessing
+├── main_train.py                # Training & model saving
+├── main_inference.py            # Inference pipeline
+├── model.py                     # Neural network definition
+├── visualize.py                 # Training/validation plots
 
-requirements.txt             # Python dependencies
+requirements.txt                 # Python dependencies
 ```
+
+---
+
+## 📂 Model Architecture
+
+```bash
+Input → Linear(64) → ReLU
+      → Linear(32) → ReLU
+      → Linear(1) → Sigmoid(Output)
+```
+
 ---
 
 ## 📂 Train the Model
