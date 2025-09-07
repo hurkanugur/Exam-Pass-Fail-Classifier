@@ -4,7 +4,6 @@
 This project predicts **student exam outcomes (Pass/Fail)** using a simple neural network built with **PyTorch**.  
 It demonstrates a full machine learning pipeline from data loading to inference, including:
 
-- 🧠 **Simple Neural Network** with one hidden layer using ReLU activation function  
 - ⚖️ **Binary Cross-Entropy (BCE) Loss** for training
 - 🚀 Adam optimizer for gradient updates 
 - 🔀 **Mini-batch training** with `DataLoader`  
