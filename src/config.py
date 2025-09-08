@@ -17,13 +17,13 @@ VAL_INTERVAL = 1
 # -------------------------
 # Dataset Splits
 # -------------------------
-SPLIT_DATASET = True  # Set False to use the full dataset for train/val/test
+SPLIT_DATASET = True
 TRAIN_SPLIT_RATIO = 0.7
 VAL_SPLIT_RATIO = 0.15
 TEST_SPLIT_RATIO = 0.15
-SPLIT_RANDOMIZATION_SEED = 42  # Seed (integer) for reproducible dataset splits; set to None for fully random splits
+SPLIT_RANDOMIZATION_SEED = 42   # Int -> Reproducible splits | None -> Fully random splits
 
 # -------------------------
 # Prediction / Classification
 # -------------------------
-CLASSIFICATION_THRESHOLD = 0.5  # Probability threshold to classify Pass vs Fail (used during inference/evaluation only)
+CLASSIFICATION_THRESHOLD = 0.5
