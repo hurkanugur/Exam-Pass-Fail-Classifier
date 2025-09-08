@@ -12,7 +12,7 @@ LEARNING_RATE = 5e-3
 WEIGHT_DECAY = 1e-6
 BATCH_SIZE = 64
 NUM_EPOCHS = 1000
-VAL_INTERVAL = 1
+VAL_INTERVAL = 10
 
 # -------------------------
 # Dataset Splits

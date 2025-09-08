@@ -38,7 +38,7 @@ git clone https://github.com/hurkanugur/Exam-Pass-Fail-Classifier.git
 
 - Navigate to the `Exam-Pass-Fail-Classifier` directory
 ```bash
-cd Car_Price_Predictor
+cd Exam-Pass-Fail-Classifier
 ```
 
 - Install dependencies
