@@ -26,9 +26,15 @@ def train_model(model, train_loader, val_loader, optimizer, loss_fn, device, los
 
         # -------------------------
         # Validation Step
-        # -------------------------
+        # -------------------------        
+        should_validate = (
+            epoch == 1
+            or epoch == config.NUM_EPOCHS
+            or epoch % config.VAL_INTERVAL == 0
+        )
+
         val_loss = None
-        if epoch % config.VAL_INTERVAL == 0:
+        if should_validate:
             model.eval()
             val_loss = 0.0
             with torch.no_grad():
@@ -44,7 +50,7 @@ def train_model(model, train_loader, val_loader, optimizer, loss_fn, device, los
         # -------------------------
         # Update Training/Validation Loss Graph
         # -------------------------
-        loss_monitor.update(train_loss, val_loss)
+        loss_monitor.update(epoch, train_loss, val_loss)
 
 
 def test_model(model, test_loader, device, n_samples=10):
