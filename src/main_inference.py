@@ -3,14 +3,16 @@ import pandas as pd
 import torch
 import config
 from dataset import ExamDataset
+from device_manager import DeviceManager
 from model import ExamClassificationModel
 
 def main():
     # -------------------------
-    # Select CPU or GPU
+    # Select CUDA (GPU) / MPS (Mac) / CPU
     # -------------------------
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    print(f"Selected device: {device}")
+    print("-------------------------------------")
+    device_manager = DeviceManager()
+    device = device_manager.device
 
     # -------------------------
     # Load normalization parameters
@@ -53,6 +55,12 @@ def main():
     for i, (p, prob) in enumerate(zip(predictions, probabilities)):
         print(f"Student {i+1}: Predicted {'Pass' if p.item() == 1 else 'Fail'}, Probability: {prob.item():.2f}")
 
+    # -------------------------
+    # Release the memory
+    # -------------------------
+    print("-------------------------------------")
+    device_manager.release_memory()
+    print("-------------------------------------")
 
 if __name__ == "__main__":
     main()
