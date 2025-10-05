@@ -34,6 +34,6 @@ class ExamClassificationModel(nn.Module):
 
     def load(self):
         """Load model state_dict using the path from config."""
-        self.load_state_dict(torch.load(config.MODEL_PATH, map_location=self.device))
+        self.load_state_dict(torch.load(config.MODEL_PATH, weights_only=True, map_location=self.device))
         self.to(self.device)
         print(f"• Model loaded from {config.MODEL_PATH}")
